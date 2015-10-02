@@ -1,3 +1,7 @@
+// Copyright 2015 Giulio Ungaretti. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 // Package s3  wraps some common s3 actions.
 // Credenttials need to be stored in the environment
 // See ../example for a simple command line thing .
