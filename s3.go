@@ -10,7 +10,6 @@ package s3
 import (
 	"fmt"
 	"io/ioutil"
-	"matilde/errors"
 	"matilde/serialize"
 	"os"
 	"strings"
@@ -60,12 +59,14 @@ func Getbucket(name string, c *Connection) (*s3.Bucket, error) {
 	_, err := bucket.List("", "", "", 1)
 	if err != nil {
 		// probably wrong name of bucket
-		errors.Log("connection to s3", name, err)
+		log.Errorf("connection to s3", name, err)
 	} else {
 		fmt.Printf("Connected to s3 bucket: %v\n", name)
 	}
 	return bucket, err
 }
+
+//TODO get rid of this dependecy
 
 // Put puts a serialize.Msgpack object into bucket b.
 // by default uploads checksum of the files
