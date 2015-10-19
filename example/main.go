@@ -5,7 +5,7 @@ package main
 import (
 	"fmt"
 	"runtime"
-	"s3"
+	s3 "s3Manager"
 )
 
 func init() {
@@ -15,6 +15,7 @@ func init() {
 
 func printKey(kb s3.KeyBucket) {
 	fmt.Println(kb.Key.Key)
+	return
 }
 
 func main() {
@@ -28,4 +29,6 @@ func main() {
 		panic(err)
 	}
 	s3.ApplyToMultiList(b, "", "", printKey)
+	//fmt.Printf("waiting for 5 sec..")
+	//time.Sleep(5 * time.Second)
 }
