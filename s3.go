@@ -10,7 +10,6 @@ package s3Manager
 import (
 	"fmt"
 	"io/ioutil"
-	"matilde/serialize"
 	"os"
 	"strings"
 	"sync"
@@ -66,17 +65,14 @@ func Getbucket(name string, c *Connection) (*s3.Bucket, error) {
 	return bucket, err
 }
 
-//TODO get rid of this dependecy
-
 // Put puts a serialize.Msgpack object into bucket b.
 // by default uploads checksum of the files
-func Put(b *s3.Bucket, data serialize.Msgpack) error {
+func Put(b *s3.Bucket, data []byte, path string, checksum string) error {
 	// data is a log of msgpack file kind
 	// aws api wants []byte
-	fileAsByteArray := data.Bytes
 	options := s3.Options{}
-	options.ContentMD5 = data.Checksum.Md5
-	err := b.Put(data.Path, fileAsByteArray, "", s3.Private, options)
+	options.ContentMD5 = checksum
+	err := b.Put(path, data, "", s3.Private, options)
 	if err != nil {
 		return err
 	}
@@ -154,7 +150,6 @@ func ApplyToMultiList(b *s3.Bucket, prefix, delim string, a Action) {
 			if err != nil {
 				panic(err)
 			}
-			isTheSame := "no"
 			lastSeen = resp.Contents[len(resp.Contents)-1]
 			fmt.Printf("------ \n %v \n-----", lastSeen.Key)
 			// TODO allow setting a max number of workers
@@ -166,7 +161,6 @@ func ApplyToMultiList(b *s3.Bucket, prefix, delim string, a Action) {
 					wg.Done()
 				}()
 			}
-			isTheSame = lastSeen.Key
 		} else {
 			break
 		}
