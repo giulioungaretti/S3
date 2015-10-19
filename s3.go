@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package s3  wraps some common s3 actions.
+// Package s3Manager  wraps some common s3 actions.
 // Credenttials need to be stored in the environment
 // See ../example for a simple command line thing .
-package s3
+package s3Manager
 
 import (
 	"fmt"
@@ -154,7 +154,9 @@ func ApplyToMultiList(b *s3.Bucket, prefix, delim string, a Action) {
 			if err != nil {
 				panic(err)
 			}
+			isTheSame := "no"
 			lastSeen = resp.Contents[len(resp.Contents)-1]
+			fmt.Printf("------ \n %v \n-----", lastSeen.Key)
 			// TODO allow setting a max number of workers
 			for _, obj := range resp.Contents {
 				atomic.AddUint64(&counter, 1)
@@ -164,6 +166,7 @@ func ApplyToMultiList(b *s3.Bucket, prefix, delim string, a Action) {
 					wg.Done()
 				}()
 			}
+			isTheSame = lastSeen.Key
 		} else {
 			break
 		}
