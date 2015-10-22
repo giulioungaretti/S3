@@ -1,4 +1,4 @@
-//+build ignore
+// +build ignore
 // Simple example that will nuke the contents of a s3 bucket
 package main
 
