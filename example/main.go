@@ -1,5 +1,6 @@
 // +build ignore
-// Simple example that will nuke the contents of a s3 bucket
+// Simple example that will print the the key of every element
+// of a bucket 
 package main
 
 import (
